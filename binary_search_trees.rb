@@ -8,11 +8,16 @@ class Node
     end
   end
   
+  module Comparable
+  end
+  
   class Tree
     attr_accessor :root
+  
+    @@height=0
     
     def initialize(array)
-      @array=array.uniq!.sort!
+      @array=array.uniq.sort!
       @root=build_tree
     end
   
@@ -94,16 +99,22 @@ class Node
       else
         queue=[]
         queue.push(node)
+        target=node.right
         until queue==[]
           current=queue[0]
-          p current.data
-          if current.left!=nil
+          current.data
+          unless current.left==nil
             queue.push(current.left)
           end
-          if current.right!=nil
+          unless current.right==nil
             queue.push(current.right)
           end
           queue.shift()
+          
+          if current==target
+            @@height+=1
+            target=current.right
+          end
         end
       end
     end
@@ -147,22 +158,8 @@ class Node
         elsif value>node.data
           node.right=height(value, node.right)
         else
-                                    i=0
-                                    j=0
-                                    unless node==nil
-                                      
-                                      node=node.left
-                                      i+=1
-                                    end
-                                    until node==nil
-                                      node=node.right
-                                      j+=1
-                                    end
-                                    if i>j 
-                                      p i
-                                    else
-                                      p j
-                                    end
+          level_order(node)
+          puts @@height
         end
       end
     end
@@ -182,7 +179,7 @@ class Node
   tree=Tree.new(array)
   
   tree.pretty_print
-  tree.height(23)
+  tree.height(67)
   
   
   
