@@ -15,6 +15,7 @@ class Node
     attr_accessor :root
   
     @@height=0
+    @@depth=0
     
     def initialize(array)
       @array=array.uniq.sort!
@@ -57,8 +58,10 @@ class Node
         node
         elsif value<node.data
           find(value, node.left)
+          @@depth+=1
         elsif value>node.data
           find(value, node.right)
+          @@depth+=1
         end
       end
     end
@@ -163,6 +166,11 @@ class Node
         end
       end
     end
+  
+    def depth(value, node=@rooth)
+      find(value)
+      puts @@depth
+    end
     
   
     def pretty_print(node = @root, prefix = '', is_left = true)
@@ -179,7 +187,8 @@ class Node
   tree=Tree.new(array)
   
   tree.pretty_print
-  tree.height(67)
+  tree.depth(6345)
+  
   
   
   
