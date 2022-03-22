@@ -19,6 +19,7 @@ class Node
     @@right_height=0
     @@left_height=0
     @@balanced=0
+    @@array=[]
     
     
     def initialize(array)
@@ -140,7 +141,7 @@ class Node
       if node==nil
         return
       else
-        node.data
+        p node.data
         preorder(node.left)
         preorder(node.right)
       end
@@ -152,7 +153,7 @@ class Node
       else
         postorder(node.left)
         postorder(node.right)
-        node.data
+        p node.data
       end
     end
   
@@ -214,6 +215,22 @@ class Node
       @@balanced=0
     end
   
+    def tree_as_array(node=@root)
+      if node==nil
+        return
+      else
+        tree_as_array(node.left)
+        @@array.append(node.data)
+        tree_as_array(node.right)
+      end
+      result=@@array
+    end
+  
+    def rebalance
+      sorted_array=tree_as_array
+      tree=Tree.new(sorted_array)
+    end
+  
     def pretty_print(node = @root, prefix = '', is_left = true)
       pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
       puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -227,10 +244,13 @@ class Node
   
   tree=Tree.new(array)
   
-  tree.balanced?
+  tree.pretty_print
   tree.insert(7000)
   tree.pretty_print
-  tree.balanced?
+  tree.insert(8000)
+  tree.pretty_print
+  tree.rebalance
+  
   
   
   
