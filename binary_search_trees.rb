@@ -117,6 +117,7 @@ class Node
           unless current.right==nil
             queue.push(current.right)
           end
+          p queue[0].data
           queue.shift()
           
           if current==target
@@ -124,6 +125,7 @@ class Node
             target=current.right
           end
         end
+        
       end
     end
   
@@ -162,14 +164,9 @@ class Node
         return
       else
         if value<node.data
-         
           node.left=height(value, node.left)
-          
         elsif value>node.data
-          
           node.right=height(value, node.right)
-          
-          
         else
           level_order(node)
           puts @@height
@@ -182,28 +179,32 @@ class Node
       puts @@depth
     end
   
+    ## This isn't working yet
     def check_for_balance(node=@root)
       if node==nil
         return
       else
         check_for_balance(node.left)
-        current=node
-        until current.left==nil
-        current=current.left
-        @@left_height+=1
+        if node.left==nil
+          puts "0"
         end
-        until current.right==nil
-         current=current.right
-         @@right_height+=1
+        until node.left==nil
+          node=node.left
+          puts @@left_height+=1
+          
         end
-        if @@left_height-@@right_height>1||@@right_height-@@left_height>1
-          puts "The tree is NOT balanced."
-          @@balanced=1
-          return
+        if node.right==nil
+          puts "0"
         end
-        check_for_balance(node.right)
+        until node.right==nil
+          node=node.right
+          @@right_height+=1
+          puts @@right_height
+        end
+        puts @@right_height-@@left_height
         @@left_height=0
         @@right_height=0
+        check_for_balance(node.right)
       end
     end
   
@@ -230,6 +231,7 @@ class Node
       sorted_array=tree_as_array
       @array=sorted_array
       @root=build_tree
+      @@array=[]
     end
   
     def pretty_print(node = @root, prefix = '', is_left = true)
@@ -241,20 +243,18 @@ class Node
     
   end
     
-  array=[1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+  array=(Array.new(15) { rand(1..100) })
   
   tree=Tree.new(array)
   
+  
   tree.pretty_print
-  tree.insert(7000)
-  tree.pretty_print
-  tree.insert(8000)
+  tree.insert(101)
+  tree.insert(201)
+  tree.insert(301)
   tree.pretty_print
   tree.rebalance
   tree.pretty_print
-  
-  
-  
   
   
   
