@@ -228,7 +228,8 @@ class Node
   
     def rebalance
       sorted_array=tree_as_array
-      tree=Tree.new(sorted_array)
+      @array=sorted_array
+      @root=build_tree
     end
   
     def pretty_print(node = @root, prefix = '', is_left = true)
@@ -250,6 +251,8 @@ class Node
   tree.insert(8000)
   tree.pretty_print
   tree.rebalance
+  tree.pretty_print
+  
   
   
   
