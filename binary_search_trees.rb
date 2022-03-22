@@ -16,6 +16,10 @@ class Node
   
     @@height=0
     @@depth=0
+    @@right_height=0
+    @@left_height=0
+    @@balanced=0
+    
     
     def initialize(array)
       @array=array.uniq.sort!
@@ -127,7 +131,7 @@ class Node
         return
       else
         inorder(node.left)
-        p node.data
+        node.data
         inorder(node.right)
       end
     end
@@ -136,7 +140,7 @@ class Node
       if node==nil
         return
       else
-        p node.data
+        node.data
         preorder(node.left)
         preorder(node.right)
       end
@@ -148,7 +152,7 @@ class Node
       else
         postorder(node.left)
         postorder(node.right)
-        p node.data
+        node.data
       end
     end
   
@@ -157,9 +161,14 @@ class Node
         return
       else
         if value<node.data
+         
           node.left=height(value, node.left)
+          
         elsif value>node.data
+          
           node.right=height(value, node.right)
+          
+          
         else
           level_order(node)
           puts @@height
@@ -171,7 +180,39 @@ class Node
       find(value)
       puts @@depth
     end
-    
+  
+    def check_for_balance(node=@root)
+      if node==nil
+        return
+      else
+        check_for_balance(node.left)
+        current=node
+        until current.left==nil
+        current=current.left
+        @@left_height+=1
+        end
+        until current.right==nil
+         current=current.right
+         @@right_height+=1
+        end
+        if @@left_height-@@right_height>1||@@right_height-@@left_height>1
+          puts "The tree is NOT balanced."
+          @@balanced=1
+          return
+        end
+        check_for_balance(node.right)
+        @@left_height=0
+        @@right_height=0
+      end
+    end
+  
+    def balanced?
+      check_for_balance
+      if @@balanced==0
+      puts "The tree is balanced."
+      end
+      @@balanced=0
+    end
   
     def pretty_print(node = @root, prefix = '', is_left = true)
       pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -186,8 +227,10 @@ class Node
   
   tree=Tree.new(array)
   
+  tree.balanced?
+  tree.insert(7000)
   tree.pretty_print
-  tree.depth(6345)
+  tree.balanced?
   
   
   
