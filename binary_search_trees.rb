@@ -2,6 +2,7 @@ class Node
     attr_accessor :data
     attr_accessor :left 
     attr_accessor :right 
+    attr_accessor :parentNode
     
     def initialize(data)
       @data=data
@@ -117,7 +118,7 @@ class Node
           unless current.right==nil
             queue.push(current.right)
           end
-          p queue[0].data
+          queue[0].data
           queue.shift()
           
           if current==target
@@ -134,7 +135,7 @@ class Node
         return
       else
         inorder(node.left)
-        node.data
+        p node.data
         inorder(node.right)
       end
     end
@@ -159,61 +160,29 @@ class Node
       end
     end
   
-    def height(value, node=@root)
+    def find_height(value, node=@root)
       if node==nil
         return
       else
         if value<node.data
-          node.left=height(value, node.left)
+          node.left=find_height(value, node.left)
         elsif value>node.data
-          node.right=height(value, node.right)
+          node.right=find_height(value, node.right)
         else
           level_order(node)
-          puts @@height
         end
       end
     end
   
-    def depth(value, node=@rooth)
+    def height(value)
+      find_height(value)
+      puts @@height
+      @@height=0
+    end
+    
+    def depth(value, node=@root)
       find(value)
       puts @@depth
-    end
-  
-    ## This isn't working yet
-    def check_for_balance(node=@root)
-      if node==nil
-        return
-      else
-        check_for_balance(node.left)
-        if node.left==nil
-          puts "0"
-        end
-        until node.left==nil
-          node=node.left
-          puts @@left_height+=1
-          
-        end
-        if node.right==nil
-          puts "0"
-        end
-        until node.right==nil
-          node=node.right
-          @@right_height+=1
-          puts @@right_height
-        end
-        puts @@right_height-@@left_height
-        @@left_height=0
-        @@right_height=0
-        check_for_balance(node.right)
-      end
-    end
-  
-    def balanced?
-      check_for_balance
-      if @@balanced==0
-      puts "The tree is balanced."
-      end
-      @@balanced=0
     end
   
     def tree_as_array(node=@root)
@@ -234,31 +203,48 @@ class Node
       @@array=[]
     end
   
+  # prints out the tree as a human readable tree (not my code, shared from another student)
     def pretty_print(node = @root, prefix = '', is_left = true)
       pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
       puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
       pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
     end
   
-    
   end
-    
+  
+  # creates a random array of 15 numbers
   array=(Array.new(15) { rand(1..100) })
   
+  # creates and prints a new bst
   tree=Tree.new(array)
-  
-  
+  puts "Original bst."
   tree.pretty_print
+  
+  # inserts 4 numbers greater than 100 inorder to unbalance the tree
   tree.insert(101)
-  tree.insert(201)
-  tree.insert(301)
+  tree.insert(102)
+  tree.insert(103)
+  tree.insert(104)
+  puts "Four numbers inserted. Tree unbalanced."
   tree.pretty_print
+  
+  # rebalances the tree
   tree.rebalance
+  puts "Tree rebalanced after insertion."
   tree.pretty_print
   
+  # deletes 4 numbers
+  tree.delete(101)
+  tree.delete(102)
+  tree.delete(103)
+  tree.delete(104)
+  puts "Four numbers deleted. Tree might be unbalanced."
+  tree.pretty_print
   
+  # rebalances the tree
+  tree.rebalance
+  puts "Tree rebalanced after deletion."
+  tree.pretty_print
   
-  
-  
-  
-  
+  # prints out nodes in order
+  tree.inorder
