@@ -243,4 +243,5 @@ puts "Tree rebalanced after deletion."
 tree.pretty_print
 
 # prints out nodes in order
+puts "Inorder list of nodes in the current tree."
 tree.inorder
